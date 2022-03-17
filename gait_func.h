@@ -13,8 +13,7 @@ extern "C" {
 
 void integrate_data(int n, float* data_in, float ts, float* data_out);
 void lin_reg(int n, float* data_in, float ts, float* data_out);
-void find_minima(int n, float* data_in, int* n_minima, int* minima);
-void find_maxima(int n, float* data_in, int* n_maxima, int* maxima);
+float find_vertical_disp(int n, float ts, float* velocity_data);
 
 #ifdef __cplusplus
 }

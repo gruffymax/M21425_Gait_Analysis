@@ -74,14 +74,14 @@ float find_vertical_disp(int n, float ts, float* velocity_data)
 	
 	int n_minima = 0;
 	int n_maxima = 0;
-	int minima[10];
-	int maxima[10];
+	int minima[10] = {0};
+	int maxima[10] = {0};
 
 	find_minima(n, velocity_data, &n_minima, minima);
 	find_maxima(n, velocity_data, &n_maxima, maxima);
 	
 	int m = 0;
-	if (n_minima =< n_maxima) {
+	if (n_minima <= n_maxima) {
 		m = n_minima;
 	}
 	else {
@@ -115,11 +115,12 @@ static void find_minima(int n, float* data_in, int* n_minima, int* minima)
 	for (int i=0; i<n-1; i++) {
 		if (data_in[i] < 0 && data_in[i+1] > 0) {
 			if (i > 0) {
-				minima[*n_minima+1] = i;
+				minima[*n_minima] = i;
 			}
 			else {
-				minima[*n_minima+1] = 0;
+				minima[*n_minima] = 0;
 			}
+			*n_minima = *n_minima + 1;
 		}
 	}
 }
@@ -143,11 +144,12 @@ static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima)
 	for (int i=0; i<n-1; i++) {
 		if (data_in[i] > 0 && data_in[i+1] < 0) {
 			if (i > 0) {
-				maxima[*n_maxima+1] = i;
+				maxima[*n_maxima] = i;
 			}
 			else {
-				maxima[*n_maxima+1] = 0;
+				maxima[*n_maxima] = 0;
 			}
+			*n_maxima = *n_maxima + 1;
 		}
 	}
 }
