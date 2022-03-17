@@ -51,3 +51,47 @@ void lin_reg(int n, float* data_in, float ts, float* data_out)
 		data_out[i] = b*ts*(float)i + a;
 	}
 }
+
+/**
+ * \brief Find minima points
+ * \param[in] n Length of data_in array
+ * \param[in] data_in Dataset from which to find minima
+ * \param[out] n_minima Number of minima found
+ * \param[out] minima Pointer to array of minima locations
+ */
+void find_minima(int n, float* data_in, int* n_minima, int* minima)
+{
+	*n_minima = 0;
+	for (int i=0; i<n-1; i++) {
+		if (data_in[i] < 0 && data_in[i+1] > 0) {
+			if (i > 0) {
+				minima[*n_minima+1] = i;
+			}
+			else {
+				minima[*n_minima+1] = 0;
+			}
+		}
+	}
+}
+
+/**
+ * \brief Find maxima points
+ * \param[in] n Length of data_in array
+ * \param[in] data_in Dataset from which to find maxima
+ * \param[out] n_maxima Number of maxima found
+ * \param[out] maxima Pointer to array of maxima locations
+ */
+void find_maxima(int n, float* data_in, int* n_maxima, int* maxima)
+{
+	*n_maxima = 0;
+	for (int i=0; i<n-1; i++) {
+		if (data_in[i] > 0 && data_in[i+1] < 0) {
+			if (i > 0) {
+				maxima[*n_maxima+1] = i;
+			}
+			else {
+				maxima[*n_maxima+1] = 0;
+			}
+		}
+	}
+}
