@@ -54,6 +54,12 @@ void lin_reg(int n, float* data_in, float ts, float* data_out)
 
 /**
  * \brief Find minima points
+ * \details Locates the point where the data crosses the x axis. Passing from
+ * negative to positive gives the location of a minima in the corrosponing 
+ * integrated data set.
+ * # Example
+ * x is a dataset and x1 is the integrated dataset. Find the minima in x1 by
+ * calling find_minima on x. 
  * \param[in] n Length of data_in array
  * \param[in] data_in Dataset from which to find minima
  * \param[out] n_minima Number of minima found
@@ -76,6 +82,12 @@ void find_minima(int n, float* data_in, int* n_minima, int* minima)
 
 /**
  * \brief Find maxima points
+ * \details Locates the point where the data crosses the x axis. Passing from
+ * positive to negative gives the location of a maxima in the corrosponding 
+ * integrated data set.
+ * # Example
+ * x is a dataset and x1 is the integrated dataset. Find the maxima in x1 by
+ * calling find_maxima on x. 
  * \param[in] n Length of data_in array
  * \param[in] data_in Dataset from which to find maxima
  * \param[out] n_maxima Number of maxima found
