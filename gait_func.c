@@ -2,6 +2,11 @@
  * \file gait_func.c
  */
 #include "gait_func.h"
+#include <stdlib.h>
+
+
+static void find_minima(int n, float* data_in, int* n_minima, int* minima);
+static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima);
 
 /**
  * \brief Perform integration on a data set.
@@ -53,6 +58,45 @@ void lin_reg(int n, float* data_in, float ts, float* data_out)
 }
 
 /**
+ * \brief Find mean vertical displacement
+ * \details Finds the vertical displacement from a vertical velocity dataset.
+ * The data should be either straight or been strightened using lin_reg().
+ * \param[in] n Length of data set
+ * \param[in] ts Sample time in seconds
+ * \param[in] velocity_data Pointer to velocity data array
+ * \returns The mean displacement in m
+ */
+float find_vertical_disp(int n, float ts, float* velocity_data)
+{
+	float* disp_data = NULL;
+	disp_data = malloc((n-1)*sizeof(float));
+	integrate_data(n, velocity_data, ts, disp_data);
+	
+	int n_minima = 0;
+	int n_maxima = 0;
+	int minima[10];
+	int maxima[10];
+
+	find_minima(n, velocity_data, &n_minima, minima);
+	find_maxima(n, velocity_data, &n_maxima, maxima);
+	
+	int m = 0;
+	if (n_minima =< n_maxima) {
+		m = n_minima;
+	}
+	else {
+		m = n_maxima;
+	}
+
+	float subTot = 0.0;
+	for (int i=0; i<m; i++) {
+		subTot = subTot + (disp_data[maxima[i]] - disp_data[minima[i]]);
+	}
+	free(disp_data);
+	return subTot / m;
+}
+
+/**
  * \brief Find minima points
  * \details Locates the point where the data crosses the x axis. Passing from
  * negative to positive gives the location of a minima in the corrosponing 
@@ -65,7 +109,7 @@ void lin_reg(int n, float* data_in, float ts, float* data_out)
  * \param[out] n_minima Number of minima found
  * \param[out] minima Pointer to array of minima locations
  */
-void find_minima(int n, float* data_in, int* n_minima, int* minima)
+static void find_minima(int n, float* data_in, int* n_minima, int* minima)
 {
 	*n_minima = 0;
 	for (int i=0; i<n-1; i++) {
@@ -93,7 +137,7 @@ void find_minima(int n, float* data_in, int* n_minima, int* minima)
  * \param[out] n_maxima Number of maxima found
  * \param[out] maxima Pointer to array of maxima locations
  */
-void find_maxima(int n, float* data_in, int* n_maxima, int* maxima)
+static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima)
 {
 	*n_maxima = 0;
 	for (int i=0; i<n-1; i++) {
@@ -107,3 +151,4 @@ void find_maxima(int n, float* data_in, int* n_maxima, int* maxima)
 		}
 	}
 }
+
