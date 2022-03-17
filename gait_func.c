@@ -6,6 +6,8 @@
 /**
  * \brief Perform integration on a data set.
  * \details Perform integration using the trapezoidal method
+ * \note The length of the data_out array MUST be 1 less
+ * than the data_in array.
  * \param[in] n Length of data_in array
  * \param[in] data_in Pointer to the input data array
  * \param[in] ts Sample time in seconds
@@ -27,25 +29,25 @@ void integrate_data(int n, float* data_in, float ts, float* data_out)
  * \brief Calculate the linear regression line of a data array
  * \param[in] n Length of data_in array
  * \param[in] data_in Pointer to the input data array
+ * \param[in] ts Sample time in seconds
  * \param[out] data_out Pointer to the output data array
  */
-void lin_reg(int n, float* data_in, float* data_out)
+void lin_reg(int n, float* data_in, float ts, float* data_out)
 {
-	float Ex = sum_data(
-}
-
-/**
- * \brief Sum the values in a data array
- * \param[in] n Length of data array
- * \param[in] data_in Pointer to input data array
- * \param[in] ts Sample time in seconds
- * \returns The sum of all data in the array
- */
-static float sum_data(int n, float* data_in, float ts)
-{
-	float sum = 0;
+	float Ex = 0;
+	float Ey = 0;
+	float Exy = 0;
+	float Ex2 = 0;
 	for (int i=0; i<n; i++) {
-		sum = sum + data_in[i];
+		Ex = Ex + ts*(float)i;
+		Ey = Ey + data_in[i];
+		Exy = Exy + (data_in[i]*ts*(float)i);
+		Ex2 = Ex2 + pow(ts*(float)i, 2);
 	}
-	return sum;
+	
+	float a = (Ey*Ex2-Ex*Exy)/(n*Ex2-pow(Ex, 2));
+	float b = (n*Exy-Ex*Ey)/(n*Ex2-pow(Ex, 2));
+	for (int i=0; i<n; i++) {
+		data_out[i] = b*ts*(float)i + a;
+	}
 }

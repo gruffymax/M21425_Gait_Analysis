@@ -9,7 +9,7 @@ extern "C" {
 #include <stdint.h>
 
 void integrate_data(int n, float* data_in, float ts, float* data_out);
-void lin_reg(int n, float* data_in, float* data_out);
+void lin_reg(int n, float* data_in, float ts, float* data_out);
 
 #ifdef __cplusplus
 }
