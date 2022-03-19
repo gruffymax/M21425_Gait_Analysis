@@ -11,6 +11,14 @@ extern "C" {
 #include <math.h>
 #include <stdint.h>
 
+struct Step {
+	float length;
+	float cadence;
+	float gait_speed;
+	float time;
+}
+
+
 void integrate_data(int n, float* data_in, float ts, float* data_out);
 void lin_reg(int n, float* data_in, float ts, float* data_out);
 float calculate_h(int n, float ts, float* acceleration_data);
