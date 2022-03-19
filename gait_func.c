@@ -145,6 +145,18 @@ float calculate_h_lin_reg(int n, float ts, float* acceleration_data)
 	free(disp_data);
 	return subTot / m;
 }
+
+/**
+ * \brief Calculate step length
+ * \param[in] h Vertical displacement in meters
+ * \param[in] l Height of the sensor from the ground in meters
+ * \returns The estimated step length in meters
+ */
+float calculate_step_length(float h, float l)
+{
+	return 2*sqrt(2*l*h - pow(h,2));
+}
+
 /**
  * \brief Find minima points
  * \details Locates the point where the data crosses the x axis. Passing from
