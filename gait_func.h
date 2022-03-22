@@ -17,13 +17,14 @@ struct Step {
 	float gait_speed;
 	float time;
 }
-
+typedef struct Step step_t;
 
 void integrate_data(int n, float* data_in, float ts, float* data_out);
 void lin_reg(int n, float* data_in, float ts, float* data_out);
 float calculate_h(int n, float ts, float* acceleration_data);
 float calculate_h_lin_reg(int n, float ts, float* acceleration_data);
-float calculate_step_length(float h, float l);
+step_t calculate_step(int n, float ts, float* acceleration_data);
+step_t calculate_step_linreg(int n, float ts, float* acceleration_data);
 
 #ifdef __cplusplus
 }

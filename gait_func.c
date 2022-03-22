@@ -7,6 +7,8 @@
 
 static void find_minima(int n, float* data_in, int* n_minima, int* minima);
 static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima);
+static step_t _calculate_step(int n, float ts, float* acceleration_data, int with_linreg);
+static float calculate_step_length(float h, float l);
 
 /**
  * \brief Perform integration on a data set.
@@ -63,14 +65,24 @@ void lin_reg(int n, float* data_in, float ts, float* data_out)
  * \param[in] n Length of data set
  * \param[in] ts Sample time in seconds
  * \param[in] acceleration_data Pointer to acceleration data array
+ * \param[in] with_linreg Flag to enable or disable linear regression
  * \returns The mean displacement in m
  */
-float calculate_h(int n, float ts, float* acceleration_data)
+static step_t _calculate_step(int n, float ts, float* acceleration_data, int with_linreg)
 {
+	step_t step;
 	float* velocity_data = malloc((n-1)*sizeof(float));
 	float* disp_data = malloc((n-2)*sizeof(float));
 	
 	integrate_data(n, acceleration_data, ts, velocity_data);
+	if (with_linreg) {
+		float* reg_line = malloc((n-1)*sizeof(float));
+		lin_reg(n-1, velocity_data, ts, reg_line);
+		for (int i=0; i<n-1; i++) {
+			velocity_data[i] = velocity_data[i] - reg_line[i];
+		}
+		free(reg_line);
+	}
 	integrate_data(n-1, velocity_data, ts, disp_data);
 	
 	int n_minima = 0;
@@ -93,57 +105,43 @@ float calculate_h(int n, float ts, float* acceleration_data)
 	for (int i=0; i<m; i++) {
 		subTot = subTot + (disp_data[maxima[i]] - disp_data[minima[i]]);
 	}
+	step.length = subTot / m;
+
+	subTot = 0;
+	float step_delta = 0;
+	for (int i=0; i<n_minima-1; i++) {
+		subTot = subTot + minima(i+1) - minima(i);
+	}
+	step_delta = subTot * ts / (n_minima-1);
 	free(velocity_data);
 	free(disp_data);
-	return subTot / m;
+
+
+	return step;
 }
 
 /**
- * \brief Find mean vertical displacement with linear regression
- * \details Finds the vertical displacement from vertical acceleratiion dataset.
- * After integrating to velocity, the data is straightened using linear
- * regression.
+ * \brief Wrapper function to call _calculate_step without linear regression
  * \param[in] n Length of data set
  * \param[in] ts Sample time in seconds
  * \param[in] acceleration_data Pointer to acceleration data array
- * \returns The mean displacement in m
+ * \returns A step_t struct with the calculated gait parameters
  */
-float calculate_h_lin_reg(int n, float ts, float* acceleration_data)
+step_t calculate_step(int n, float ts, float* acceleration_data)
 {
-	float* velocity_data = malloc((n-1)*sizeof(float));
-	float* disp_data = malloc((n-2)*sizeof(float));
-	float* reg_line = malloc((n-1)*sizeof(float));
+	return _calculate_step(n, ts, acceleration_data, 0);
+}
 
-	integrate_data(n, acceleration_data, ts, velocity_data);
-	lin_reg(n-1, velocity_data, ts, reg_line);
-	for (int i=0; i<n-1; i++) {
-		velocity_data[i] = velocity_data[i] - reg_line[i];
-	}
-	integrate_data(n-1, velocity_data, ts, disp_data);
-	
-	int n_minima = 0;
-	int n_maxima = 0;
-	int minima[10] = {0};
-	int maxima[10] = {0};
-
-	find_minima(n, velocity_data, &n_minima, minima);
-	find_maxima(n, velocity_data, &n_maxima, maxima);
-	
-	int m = 0;
-	if (n_minima <= n_maxima) {
-		m = n_minima;
-	}
-	else {
-		m = n_maxima;
-	}
-
-	float subTot = 0.0;
-	for (int i=0; i<m; i++) {
-		subTot = subTot + (disp_data[maxima[i]] - disp_data[minima[i]]);
-	}
-	free(velocity_data);
-	free(disp_data);
-	return subTot / m;
+/**
+ * \brief Wrapper function to call _calculate_step with linear regression
+ * \param[in] n Length of data set
+ * \param[in] ts Sample time in seconds
+ * \param[in] acceleration_data Pointer to acceleration data array
+ * \returns A step_t struct with the calculated gait parameters
+ */
+step_t calculate_step_linreg(int n, float ts, float* acceleration_data)
+{
+	return _calculate_step(n, ts ,acceleration_data, 1);
 }
 
 /**
@@ -152,7 +150,7 @@ float calculate_h_lin_reg(int n, float ts, float* acceleration_data)
  * \param[in] l Height of the sensor from the ground in meters
  * \returns The estimated step length in meters
  */
-float calculate_step_length(float h, float l)
+static float calculate_step_length(float h, float l)
 {
 	return 2*sqrt(2*l*h - pow(h,2));
 }
