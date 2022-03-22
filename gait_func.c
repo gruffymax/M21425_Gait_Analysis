@@ -67,6 +67,7 @@ static void lin_reg(int n, float* data_in, float ts, float* data_out)
  * \details Finds the vertical displacement from a vertical acceleration dataset.
  * \param[in] n Length of data set
  * \param[in] ts Sample time in seconds
+ * \param[in] l Height of sensor from the ground in meters
  * \param[in] acceleration_data Pointer to acceleration data array
  * \param[in] with_linreg Flag to enable or disable linear regression
  * \returns The mean displacement in m
@@ -119,7 +120,7 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 	subTot = 0;
 	float step_delta = 0;
 	for (int i=0; i<n_minima-1; i++) {
-		subTot = subTot + minima(i+1) - minima(i);
+		subTot = subTot + minima[i+1] - minima[i];
 	}
 	step_delta = subTot * ts / (n_minima-1);
 
@@ -138,6 +139,7 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
  * \brief Wrapper function to call _calculate_step without linear regression
  * \param[in] n Length of data set
  * \param[in] ts Sample time in seconds
+ * \param[in] l Height of sensor from the ground in meters
  * \param[in] acceleration_data Pointer to acceleration data array
  * \returns A step_t struct with the calculated gait parameters
  */
@@ -150,6 +152,7 @@ step_t calculate_step(int n, float ts, float l, float* acceleration_data)
  * \brief Wrapper function to call _calculate_step with linear regression
  * \param[in] n Length of data set
  * \param[in] ts Sample time in seconds
+ * \param[in] l Height of sensor from the ground in meters
  * \param[in] acceleration_data Pointer to acceleration data array
  * \returns A step_t struct with the calculated gait parameters
  */

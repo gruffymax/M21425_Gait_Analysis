@@ -16,7 +16,7 @@ struct Step {
 	float cadence;
 	float gait_speed;
 	float time;
-}
+};
 typedef struct Step step_t;
 
 step_t calculate_step(int n, float ts, float l, float* acceleration_data);
