@@ -7,8 +7,11 @@
 
 static void find_minima(int n, float* data_in, int* n_minima, int* minima);
 static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima);
-static step_t _calculate_step(int n, float ts, float* acceleration_data, int with_linreg);
+static step_t _calculate_step(int n, float ts, float l, float* acceleration_data, int with_linreg);
 static float calculate_step_length(float h, float l);
+static void lin_reg(int n, float* data_in, float ts, float* data_out);
+static void integrate_data(int n, float* data_in, float ts, float* data_out);
+
 
 /**
  * \brief Perform integration on a data set.
@@ -20,7 +23,7 @@ static float calculate_step_length(float h, float l);
  * \param[in] ts Sample time in seconds
  * \param[out] data_out Pointer to the output data array
  */
-void integrate_data(int n, float* data_in, float ts, float* data_out)
+static void integrate_data(int n, float* data_in, float ts, float* data_out)
 {
 	float subTot = 0;
 	for (int i=1; i<n; i++) {
@@ -39,7 +42,7 @@ void integrate_data(int n, float* data_in, float ts, float* data_out)
  * \param[in] ts Sample time in seconds
  * \param[out] data_out Pointer to the output data array
  */
-void lin_reg(int n, float* data_in, float ts, float* data_out)
+static void lin_reg(int n, float* data_in, float ts, float* data_out)
 {
 	float Ex = 0;
 	float Ey = 0;
@@ -68,12 +71,13 @@ void lin_reg(int n, float* data_in, float ts, float* data_out)
  * \param[in] with_linreg Flag to enable or disable linear regression
  * \returns The mean displacement in m
  */
-static step_t _calculate_step(int n, float ts, float* acceleration_data, int with_linreg)
+static step_t _calculate_step(int n, float ts, float l, float* acceleration_data, int with_linreg)
 {
 	step_t step;
 	float* velocity_data = malloc((n-1)*sizeof(float));
 	float* disp_data = malloc((n-2)*sizeof(float));
-	
+
+	/* Calculate displacement data */	
 	integrate_data(n, acceleration_data, ts, velocity_data);
 	if (with_linreg) {
 		float* reg_line = malloc((n-1)*sizeof(float));
@@ -85,6 +89,7 @@ static step_t _calculate_step(int n, float ts, float* acceleration_data, int wit
 	}
 	integrate_data(n-1, velocity_data, ts, disp_data);
 	
+	/* Calculate minima and maxima */
 	int n_minima = 0;
 	int n_maxima = 0;
 	int minima[10] = {0};
@@ -93,6 +98,8 @@ static step_t _calculate_step(int n, float ts, float* acceleration_data, int wit
 	find_minima(n, velocity_data, &n_minima, minima);
 	find_maxima(n, velocity_data, &n_maxima, maxima);
 	
+	/* Calculate step length */
+	float h = 0;
 	int m = 0;
 	if (n_minima <= n_maxima) {
 		m = n_minima;
@@ -105,14 +112,21 @@ static step_t _calculate_step(int n, float ts, float* acceleration_data, int wit
 	for (int i=0; i<m; i++) {
 		subTot = subTot + (disp_data[maxima[i]] - disp_data[minima[i]]);
 	}
-	step.length = subTot / m;
+	h = subTot / m;
+	step.length = calculate_step_length(h, l);
 
+	/* Calculate time between steps */
 	subTot = 0;
 	float step_delta = 0;
 	for (int i=0; i<n_minima-1; i++) {
 		subTot = subTot + minima(i+1) - minima(i);
 	}
 	step_delta = subTot * ts / (n_minima-1);
+
+	step.cadence = 60/step_delta;
+	step.gait_speed = step.length / step_delta;
+	step.time = 5/step.gait_speed;
+
 	free(velocity_data);
 	free(disp_data);
 
@@ -127,9 +141,9 @@ static step_t _calculate_step(int n, float ts, float* acceleration_data, int wit
  * \param[in] acceleration_data Pointer to acceleration data array
  * \returns A step_t struct with the calculated gait parameters
  */
-step_t calculate_step(int n, float ts, float* acceleration_data)
+step_t calculate_step(int n, float ts, float l, float* acceleration_data)
 {
-	return _calculate_step(n, ts, acceleration_data, 0);
+	return _calculate_step(n, ts, l, acceleration_data, 0);
 }
 
 /**
@@ -139,9 +153,9 @@ step_t calculate_step(int n, float ts, float* acceleration_data)
  * \param[in] acceleration_data Pointer to acceleration data array
  * \returns A step_t struct with the calculated gait parameters
  */
-step_t calculate_step_linreg(int n, float ts, float* acceleration_data)
+step_t calculate_step_linreg(int n, float ts, float l, float* acceleration_data)
 {
-	return _calculate_step(n, ts ,acceleration_data, 1);
+	return _calculate_step(n, ts, l, acceleration_data, 1);
 }
 
 /**
