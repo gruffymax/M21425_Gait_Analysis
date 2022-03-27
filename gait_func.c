@@ -10,7 +10,6 @@ static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima);
 static step_t _calculate_step(int n, float ts, float l, float* acceleration_data, int with_linreg);
 static float calculate_step_length(float h, float l);
 static void lin_reg(int n, float* data_in, float ts, float* data_out);
-static void integrate_data(int n, float* data_in, float ts, float* data_out);
 
 
 /**
@@ -23,7 +22,7 @@ static void integrate_data(int n, float* data_in, float ts, float* data_out);
  * \param[in] ts Sample time in seconds
  * \param[out] data_out Pointer to the output data array
  */
-static void integrate_data(int n, float* data_in, float ts, float* data_out)
+void integrate_data(int n, float* data_in, float ts, float* data_out)
 {
 	float subTot = 0;
 	for (int i=1; i<n; i++) {
@@ -78,7 +77,7 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 	float* velocity_data = malloc((n-1)*sizeof(float));
 	float* disp_data = malloc((n-2)*sizeof(float));
 
-	/* Calculate displacement data */	
+	/* Calculate displacement data */
 	integrate_data(n, acceleration_data, ts, velocity_data);
 	if (with_linreg) {
 		float* reg_line = malloc((n-1)*sizeof(float));
@@ -130,7 +129,6 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 
 	free(velocity_data);
 	free(disp_data);
-
 
 	return step;
 }
