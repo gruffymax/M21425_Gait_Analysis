@@ -11,6 +11,17 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 static float calculate_step_length(float h, float l);
 static void lin_reg(int n, float* data_in, float ts, float* data_out);
 
+/**
+ * \brief Calculate calibration factor
+ * \details The calibration factor is used to scale the readings from the
+ * accelerometer to the actual vertical and horozontal values.
+ * \param[in] y The y axis value
+ * \returns The calibration factor
+ */
+float get_calibration_factor(float y)
+{
+	return y / 9.81;
+}
 
 /**
  * \brief Perform integration on a data set.
