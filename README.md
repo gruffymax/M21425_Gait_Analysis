@@ -36,3 +36,9 @@ ground and is set as 1.1m in this example.
      Serial.println(my_step.cadence);
      Serial.println(my_step.time);
      Serial.println(my_step.gait_time);
+
+If excessive integration error is present it might be better to use linear
+regression to improve the data. The method to use linear regression is the same
+execpt:
+
+     step_t my_step = calculate_step_linreg(500, 0.01, 1.1, y-data);
