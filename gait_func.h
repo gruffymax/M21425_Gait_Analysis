@@ -22,7 +22,9 @@ typedef struct Step step_t;
 step_t calculate_step(int n, float ts, float l, float* acceleration_data);
 step_t calculate_step_linreg(int n, float ts, float l, float* acceleration_data);
 void integrate_data(int n, float* data_in, float ts, float* data_out);
-float get_calibration_factor(float y);
+float get_calibration_angle(float y);
+float get_corrected_y(float factor, float y_raw);
+float get_corrected_x(float factor, float x_raw);
 
 #ifdef __cplusplus
 }

@@ -87,8 +87,18 @@ void test_6(void)
 {
 	printf("Testing calibration function");
 	float y = 9.42;
-	float y_factor = get_calibration_factor(y);
-	TEST_ASSERT_EQUAL_FLOAT(0.960245, y_factor);
+	float y_angle = get_calibration_angle(y);
+	TEST_ASSERT_EQUAL_FLOAT(0.282919, y_angle);
+}
+
+void test_7(void)
+{
+	printf("Testing get_corrected_y\n");
+	float y_raw = 9.42;
+	//float y_factor = get_calibration_factor(y_raw);
+	
+	//float y = get_corrected_y(y_factor, y_raw);
+	//TEST_ASSERT_EQUAL_FLOAT(0.0, y);
 }
 
 int main (void)
@@ -100,5 +110,6 @@ int main (void)
 	RUN_TEST(test_4);
 	RUN_TEST(test_5);
 	RUN_TEST(test_6);
+	//RUN_TEST(test_7);
 	return UNITY_END();
 }

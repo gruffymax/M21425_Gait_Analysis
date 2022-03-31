@@ -12,16 +12,39 @@ static float calculate_step_length(float h, float l);
 static void lin_reg(int n, float* data_in, float ts, float* data_out);
 
 /**
- * \brief Calculate calibration factor
- * \details The calibration factor is used to scale the readings from the
+ * \brief Calculate calibration angle
+ * \details The calibration angle is used to scale the readings from the
  * accelerometer to the actual vertical and horozontal values.
  * \param[in] y The y axis value
- * \returns The calibration factor
+ * \returns The calibration angle
  */
-float get_calibration_factor(float y)
+float get_calibration_angle(float y)
 {
-	return y / 9.81;
+	return acos(y / 9.81);
 }
+
+/**
+ * \brief Correct the y-axis value based on the correction factor
+ * \param[in] factor The correction factor
+ * \param[in] y_raw The raw y value
+ * \returns The corrected y value
+ */
+float get_corrected_y(float factor, float y_raw)
+{
+	return 0.0;
+}
+
+/**
+ * \brief Correct the x-axis value based on the correction factor
+ * \param[in] factor The correction factor
+ * \param[in] x_raw The raw x value
+ * \returns The corrected y value
+ */
+float get_corrected_x(float factor, float x_raw)
+{
+	return 0.0;
+}
+
 
 /**
  * \brief Perform integration on a data set.
