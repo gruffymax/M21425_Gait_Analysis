@@ -12,9 +12,9 @@ static float calculate_step_length(float h, float l);
 static void lin_reg(int n, float* data_in, float ts, float* data_out);
 
 /**
- * \brief Calculate calibration angle
+ * \brief Calculate calibration angle in radians
  * \details The calibration angle is used to scale the readings from the
- * accelerometer to the actual vertical and horozontal values.
+ * accelerometer to the actual vertical and horizontal values.
  * \param[in] y The y axis value
  * \returns The calibration angle
  */
@@ -98,7 +98,7 @@ static void lin_reg(int n, float* data_in, float ts, float* data_out)
 }
 
 /**
- * \brief Find mean vertical displacement
+ * \brief Calculate gait parameters
  * \details Finds the vertical displacement from a vertical acceleration dataset.
  * \param[in] n Length of data set
  * \param[in] ts Sample time in seconds
