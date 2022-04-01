@@ -25,24 +25,26 @@ float get_calibration_angle(float y)
 
 /**
  * \brief Correct the y-axis value based on the correction factor
- * \param[in] factor The correction factor
+ * \param[in] angle The correction angle
  * \param[in] y_raw The raw y value
  * \returns The corrected y value
  */
-float get_corrected_y(float factor, float y_raw)
+float get_corrected_y(float angle, float y_raw)
 {
-	return 0.0;
+	float offset = 9.81*cos(angle);
+	return (y_raw-offset)/cos(angle);
 }
 
 /**
  * \brief Correct the x-axis value based on the correction factor
- * \param[in] factor The correction factor
+ * \param[in] angle The correction angle
  * \param[in] x_raw The raw x value
  * \returns The corrected y value
  */
-float get_corrected_x(float factor, float x_raw)
+float get_corrected_x(float angle, float x_raw)
 {
-	return 0.0;
+	float offset = 9.81*cos(1.5708-angle);
+	return (x_raw-offset)*cos(angle);
 }
 
 
