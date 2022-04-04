@@ -28,8 +28,10 @@ Session calibration is performed everytime time device is started. It
 compensates for the mounting angle of the sensor once it is on the person's
 back. To perform the calibration:-
 
-1. Take X and Y axis measurements. Either single readings or an average.
-2. Pass these readings to the get_calibration_angle() function. 
+1. Take X and Y axis measurements. Either single readings or an average. These
+   values must be stored for use in step 4.
+2. Pass these readings to the get_calibration_angle() function. Save this angle
+   value for use in step 4.
 3. Collect your data set.
 4. Each X or Y axis value needs to be passed into either get_corrected_x() or
    get_corrected_y(). These return the corrected values using the angle
