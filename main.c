@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define UNITY_OUTPUT_COLOR
+
 int is_equal(float a, float b)
 {
 	float d = sqrt(pow(a-b,2));
@@ -97,26 +99,30 @@ void test_5(void)
 void test_6(void)
 {
 	printf("Testing calibration function\n");
+	float x = 2.74;
 	float y = 9.42;
-	float y_angle = get_calibration_angle(y);
-	TEST_ASSERT_EQUAL_FLOAT(0.282919, y_angle);
+	float y_angle = get_calibration_angle(x, y);
+	TEST_ASSERT_EQUAL_FLOAT(0.28306, y_angle);
 }
 
 void test_7(void)
 {
 	printf("Testing get_corrected_y\n");
+	float x_raw = 1.507;
 	float y_raw = 9.661;
-	float y_angle = get_calibration_angle(y_raw);
-	float y = get_corrected_y(y_angle, 8.5);
-	TEST_ASSERT_EQUAL_FLOAT(-1.1789, y);
+	float y_angle = get_calibration_angle(x_raw, y_raw);
+	TEST_ASSERT_EQUAL_FLOAT(0.154741, y_angle);
+
+	float y = get_corrected_y(y_angle, y_raw, 8.5);
+	TEST_ASSERT_EQUAL_FLOAT(-1.17504, y);
 }
 
 void test_8(void)
 {
 	printf("Testing get_corrected_x\n");
-	float x_angle = get_calibration_angle(9.661);
-	float x = get_corrected_x(x_angle, 2.0);
-	TEST_ASSERT_EQUAL(1, is_equal(0.2925, x));
+	float x_angle = get_calibration_angle(1.507, 9.661);
+	float x = get_corrected_x(x_angle, 1.507, 2.0);
+	TEST_ASSERT_EQUAL_FLOAT(0.487109, x);
 }
 
 int main (void)
