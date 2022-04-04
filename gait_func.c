@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 
+
 static void find_minima(int n, float* data_in, int* n_minima, int* minima);
 static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima);
 static step_t _calculate_step(int n, float ts, float l, float* acceleration_data, int with_linreg);
@@ -15,36 +16,37 @@ static void lin_reg(int n, float* data_in, float ts, float* data_out);
  * \brief Calculate calibration angle in radians
  * \details The calibration angle is used to scale the readings from the
  * accelerometer to the actual vertical and horizontal values.
- * \param[in] y The y axis value
- * \returns The calibration angle
+ * \param[in] x The x axis value (m/s^2)
+ * \param[in] y The y axis value (m/s^2)
+ * \returns The calibration angle (radians)
  */
-float get_calibration_angle(float y)
+float get_calibration_angle(float x, float y)
 {
-	return acos(y / 9.81);
+	return (float)atan(x / y);
 }
 
 /**
- * \brief Correct the y-axis value based on the correction factor
- * \param[in] angle The correction angle
- * \param[in] y_raw The raw y value
- * \returns The corrected y value
+ * \brief Correct the y-axis value based on the correction angle
+ * \param[in] angle The correction angle (radians)
+ * \param[in] y_cal The Y-axis value taken during session calibration
+ * \param[in] y_raw The raw y value (m/s^2)
+ * \returns The corrected y value (m/s^2)
  */
-float get_corrected_y(float angle, float y_raw)
+float get_corrected_y(float angle, float y_cal, float y_raw)
 {
-	float offset = 9.81*cos(angle);
-	return (y_raw-offset)/cos(angle);
+	return (y_raw-y_cal)/cos(angle);
 }
 
 /**
- * \brief Correct the x-axis value based on the correction factor
- * \param[in] angle The correction angle
- * \param[in] x_raw The raw x value
- * \returns The corrected y value
+ * \brief Correct the x-axis value based on the correction angle
+ * \param[in] angle The correction angle (radians)
+ * \param[in] x_cal The X-axis value taken during session calibration
+ * \param[in] x_raw The raw x value (m/s^2)
+ * \returns The corrected x value (m/s^2)
  */
-float get_corrected_x(float angle, float x_raw)
+float get_corrected_x(float angle, float x_cal, float x_raw)
 {
-	float offset = 9.81*cos(1.5708-angle);
-	return (x_raw-offset)*cos(angle);
+	return (x_raw-x_cal)*cos(angle);
 }
 
 
