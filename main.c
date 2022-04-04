@@ -6,17 +6,6 @@
 
 #define UNITY_OUTPUT_COLOR
 
-int is_equal(float a, float b)
-{
-	float d = sqrt(pow(a-b,2));
-	
-	if (d > 0.001) {
-		return 0;
-		printf("d=%.5f",d);
-	}
-	return 1;
-}
-
 void setUp(void)
 {
 
