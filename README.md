@@ -23,7 +23,19 @@ Include the library header near the top of the Arduino script:
 
      #include "gait_func.h"
 
-## Example
+## Session Calibration Example
+Session calibration is performed everytime time device is started. It
+compensates for the mounting angle of the sensor once it is on the person's
+back. To perform the calibration:-
+
+1. Take X and Y axis measurements. Either single readings or an average.
+2. Pass these readings to the get_calibration_angle() function. 
+3. Collect your data set.
+4. Each X or Y axis value needs to be passed into either get_corrected_x() or
+   get_corrected_y(). These return the corrected values using the angle
+   measured in step 2.
+
+## Step Calculation Example
 The following pseudocode demonstrates how to use the library functions. The
 example data is collected at 100Hz for 5 seconds. Therefore n = 500 and ts
 (sample time) = 0.01. The value of l is the height of the sensor from the
