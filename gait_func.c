@@ -148,7 +148,7 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 
 	float subTot = 0.0;
 	for (int i=0; i<m; i++) {
-		subTot = subTot + (disp_data[maxima[i]] - disp_data[minima[i]]);
+		subTot = subTot + (sqrt(pow(disp_data[maxima[i]],2)) + sqrt(pow(disp_data[minima[i]], 2));
 	}
 	h = subTot / m;
 	step.length = calculate_step_length(h, l);
