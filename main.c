@@ -119,7 +119,7 @@ void test_8(void)
 void test_9(void)
 {
 	step_t mystep = calculate_step_linreg(500, 0.01, 1.1, data);
-	TEST_ASSERT_EQUAL_FLOAT(0.50, mystep.length);
+	TEST_ASSERT_EQUAL_FLOAT(0.6135, mystep.length);
 }
 
 int main (void)
