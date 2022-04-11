@@ -6,6 +6,8 @@
 
 #define UNITY_OUTPUT_COLOR
 
+#include "data.c"
+
 void setUp(void)
 {
 
@@ -114,6 +116,12 @@ void test_8(void)
 	TEST_ASSERT_EQUAL_FLOAT(0.487109, x);
 }
 
+void test_9(void)
+{
+	step_t mystep = calculate_step_linreg(500, 0.01, 1.1, data);
+	TEST_ASSERT_EQUAL_FLOAT(0.50, mystep.length);
+}
+
 int main (void)
 {
 	UNITY_BEGIN();
@@ -125,5 +133,6 @@ int main (void)
 	RUN_TEST(test_6);
 	RUN_TEST(test_7);
 	RUN_TEST(test_8);
+	RUN_TEST(test_9);
 	return UNITY_END();
 }
