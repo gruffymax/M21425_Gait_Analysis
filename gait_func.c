@@ -130,8 +130,8 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 	/* Calculate minima and maxima */
 	int n_minima = 0;
 	int n_maxima = 0;
-	int minima[10] = {0};
-	int maxima[10] = {0};
+	int minima[20] = {0};
+	int maxima[20] = {0};
 
 	find_minima(n, velocity_data, &n_minima, minima);
 	find_maxima(n, velocity_data, &n_maxima, maxima);
