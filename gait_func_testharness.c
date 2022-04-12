@@ -21,3 +21,8 @@ void test_lin_reg(int n, float* data_in, float ts, float* data_out)
 {
 	lin_reg(n, data_in, ts, data_out);
 }
+
+float test_get_minimum_value(int n, float* data)
+{
+	return get_minimum_value(n, data);
+}

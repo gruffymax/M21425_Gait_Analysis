@@ -123,6 +123,13 @@ void test_9(void)
 	TEST_ASSERT_EQUAL_FLOAT(0.47206, mystep.length);
 }
 
+void test_10(void)
+{
+	float data[5] = {3, -2, -1, 2, 1};
+	float res = test_get_minimum_value(5, data);
+	TEST_ASSERT_EQUAL_FLOAT(-2.0, res);
+}
+
 int main (void)
 {
 	UNITY_BEGIN();
@@ -135,5 +142,6 @@ int main (void)
 	RUN_TEST(test_7);
 	RUN_TEST(test_8);
 	RUN_TEST(test_9);
+	RUN_TEST(test_10);
 	return UNITY_END();
 }
