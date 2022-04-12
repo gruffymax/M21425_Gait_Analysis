@@ -11,6 +11,7 @@ static void find_maxima(int n, float* data_in, int* n_maxima, int* maxima);
 static step_t _calculate_step(int n, float ts, float l, float* acceleration_data, int with_linreg);
 static float calculate_step_length(float h, float l);
 static void lin_reg(int n, float* data_in, float ts, float* data_out);
+static float get_minimum_value(int n, float* data);
 
 /**
  * \brief Calculate calibration angle in radians
@@ -169,6 +170,23 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 	free(disp_data);
 
 	return step;
+}
+
+/**
+ * \brief Finds the minimum value from a dataset
+ * \param[in] n Length of data set
+ * \param[in] data Pointer to data array
+ * \returns the minimum value in the array
+ */
+static float get_minimum_value(int n, float* data)
+{
+	float min = data[0];
+	for (int i=1; i<n; i++) {
+		if (data[i] < min) {
+			min = data[i];
+		}
+	}
+	return min;
 }
 
 /**
