@@ -120,7 +120,7 @@ void test_9(void)
 {
 	step_t mystep = calculate_step_linreg(500, 0.01, 1.1, data);
 	/* Test result is confirmed with MATLAB */
-	TEST_ASSERT_EQUAL_FLOAT(0.6135, mystep.length);
+	TEST_ASSERT_EQUAL_FLOAT(0.47206, mystep.length);
 }
 
 int main (void)
