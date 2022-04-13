@@ -25,6 +25,7 @@ void integrate_data(int n, float* data_in, float ts, float* data_out);
 float get_calibration_angle(float x, float y);
 float get_corrected_y(float angle, float y_cal, float y_raw);
 float get_corrected_x(float angle, float x_cal, float x_raw);
+void lin_reg(int n, float* data_in, float ts, float* data_out);
 
 #ifdef __cplusplus
 }
