@@ -147,7 +147,7 @@ static step_t _calculate_step(int n, float ts, float l, float* acceleration_data
 		m = n_maxima;
 	}
 
-	float minimum_value = get_minimum_value(n-2, disp_data);
+	float minimum_value = sqrt(pow(get_minimum_value(n-2, disp_data), 2));
 	float subTot = 0.0;
 	for (int i=0; i<m; i++) {
 		subTot = subTot + (disp_data[maxima[i]]+minimum_value) - (disp_data[minima[i]]+minimum_value);
