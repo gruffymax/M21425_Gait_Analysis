@@ -119,8 +119,11 @@ void test_8(void)
 void test_9(void)
 {
 	step_t mystep = calculate_step_linreg(500, 0.01, 1.1, data);
-	/* Test result is confirmed with MATLAB */
+	/* Test results are confirmed with MATLAB */
 	TEST_ASSERT_EQUAL_FLOAT(0.47206, mystep.length);
+	TEST_ASSERT_EQUAL_FLOAT(164.3836, mystep.cadence);
+	TEST_ASSERT_EQUAL_FLOAT(1.293325, mystep.gait_speed);
+	TEST_ASSERT_EQUAL_FLOAT(3.8660, mystep.time);
 }
 
 void test_10(void)
