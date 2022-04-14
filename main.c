@@ -20,7 +20,6 @@ void tearDown(void)
 
 void test_1(void)
 {
-	printf("Testing lin_reg\n");
 	float x[7] = {2.0, 1.0, 4.0, 2.0, 5.0, 3.0, 7.0};
 	float z[7] = {1.285714, 2.0, 2.714286, 3.428571, 4.142857, 
 			4.857143, 5.571429};
@@ -37,7 +36,6 @@ void test_1(void)
 
 void test_2(void)
 {
-	printf("Testing find_minima\n");
 	float x[10] = {2.0f, 1.0f, -1.0f, -2.0f, -1.0f, 1.0f, 2.0f,
 		1.0f, -1.0f, -2.0f};
 	int min;
@@ -49,7 +47,6 @@ void test_2(void)
 
 void test_3(void)
 {
-	printf("Testing find_maxima\n");
 	float x[10] = {2.0f, 1.0f, -1.0f, -2.0f, -1.0f, 1.0f, 2.0f,
 		1.0f, -1.0f, -2.0f};
 	int max;
@@ -62,7 +59,6 @@ void test_3(void)
 
 void test_4(void)
 {
-	printf("Testing calculate_step_length\n");
 	float h = 0.02;
 	float l = 1.1;
 	float x = test_calculate_step_length(h, l);
@@ -71,7 +67,6 @@ void test_4(void)
 
 void test_5(void)
 {
-	printf("Testing integrate_data\n");
 	float x[10] = {2.0f, 1.0f, -1.0f, -2.0f, -1.0f, 1.0f, 2.0f,
 		1.0f, -1.0f, -2.0f};
 	float X[9];
@@ -89,7 +84,6 @@ void test_5(void)
 
 void test_6(void)
 {
-	printf("Testing calibration function\n");
 	float x = 2.74;
 	float y = 9.42;
 	float y_angle = get_calibration_angle(x, y);
@@ -98,7 +92,6 @@ void test_6(void)
 
 void test_7(void)
 {
-	printf("Testing get_corrected_y\n");
 	float x_raw = 1.507;
 	float y_raw = 9.661;
 	float y_angle = get_calibration_angle(x_raw, y_raw);
@@ -110,7 +103,6 @@ void test_7(void)
 
 void test_8(void)
 {
-	printf("Testing get_corrected_x\n");
 	float x_angle = get_calibration_angle(1.507, 9.661);
 	float x = get_corrected_x(x_angle, 1.507, 2.0);
 	TEST_ASSERT_EQUAL_FLOAT(0.487109, x);
